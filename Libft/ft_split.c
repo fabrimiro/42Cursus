@@ -26,7 +26,7 @@ int		ft_count_words(const char *s, char c)
 
 	numwords = 0;
 	i = 0;
-	while (str[i] != '\0')
+	while (s[i] != '\0')
 	{
 		if ((s[i + 1] == c || s[i + 1] == '\0') == 1
 				&& (s[i] == c || s[i] == '\0') == 0)
@@ -43,7 +43,7 @@ void	write_word(char *s1, const char *s2, char c)
 	i = 0;
 	while ((s2[i] == c || s2[i] == '\0') == 0)
 	{
-		s1[i] = s2[I];
+		s1[i] = s2[i];
 		i++;
 	}
 	s1[I] = '\0';
@@ -59,7 +59,7 @@ int		ft_split2(char **split, const char *s, char c)
 	i = 0;
 	while (s[i] != '\0')
 	{
-		if ((s[i] == c || str[i] == '\0') == 1)
+		if ((s[i] == c || s[i] == '\0') == 1)
 			i++;
 		else
 		{
@@ -68,7 +68,7 @@ int		ft_split2(char **split, const char *s, char c)
 				j++;
 			if ((split[word] = (char*)malloc(sizeof(char) * (j + 1))) == NULL)
 				return (ft_free_mat(split, word - 1));
-			write_word(split[word], s + i, charset);
+			write_word(split[word], s + i, c);
 			i += j;
 			word++;
 		}
@@ -81,7 +81,7 @@ char	**ft_split(const char *s, char c)
 	char	**mat;
 	int		numwords;
 
-	numwords = ft_count_words(str, c);
+	numwords = ft_count_words(s, c);
 	if ((mat = (char**)malloc(sizeof(char*) * (numwords + 1))) == NULL)
 		return (NULL);
 	mat[numwords] = 0;
