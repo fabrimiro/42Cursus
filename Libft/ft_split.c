@@ -1,112 +1,91 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_def.c                                     :+:      :+:    :+:   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmiranda <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/15 19:17:57 by fmiranda          #+#    #+#             */
-/*   Updated: 2021/01/18 18:11:51 by fmiranda         ###   ########.fr       */
+/*   Created: 2021/01/22 11:09:07 by fmiranda          #+#    #+#             */
+/*   Updated: 2021/01/22 11:09:35 by fmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_find_char(char const *s, char c)
+int		ft_free_mat(char **mat, int size)
 {
-	int		i;
-	int		k;
+	while (size--)
+		free(mat[size]);
+	return (0);
+}
 
+int		ft_count_words(const char *s, char c)
+{
+	int	i;
+	int	numwords;
+
+	numwords = 0;
 	i = 0;
-	k = 0;
-	while (s[i] != '\0')
+	while (str[i] != '\0')
 	{
-		if (s[i] == c)
-			k++;
+		if ((s[i + 1] == c || s[i + 1] == '\0') == 1
+				&& (s[i] == c || s[i] == '\0') == 0)
+			numwords++;
 		i++;
 	}
-	return (k);
+	return (numwords);
 }
 
-int		ft_empty_str(char const *s, char c)
+void	write_word(char *s1, const char *s2, char c)
 {
-	int		i;
-	int		k;
-	int		l;
+	int	i;
 
 	i = 0;
-	k = 0;
-	l = ft_strlen(s) - 1;
-	while (s[i] != '\0')
+	while ((s2[i] == c || s2[i] == '\0') == 0)
 	{
-		if (s[i] == c)
-			k++;
+		s1[i] = s2[I];
 		i++;
 	}
-	if (k == (l + 1))
-		k = -1;
-	return (k);
+	s1[I] = '\0';
 }
 
-char	**ft_split2(char const *s, char c, char **mat, int x)
+int		ft_split2(char **split, const char *s, char c)
 {
-	int		k;
-	int		y;
+	int		i;
+	int		j;
+	int		word;
 
-	y = 0;
-	k = 0;
-	while (s[y] != '\0')
+	word = 0;
+	i = 0;
+	while (s[i] != '\0')
 	{
-		if (s[y] != c)
+		if ((s[i] == c || str[i] == '\0') == 1)
+			i++;
+		else
 		{
-			mat[x][k] = s[y];
-			k++;
+			j = 0;
+			while ((s[i + j] == c || s[i + j] == '\0') == 0)
+				j++;
+			if ((split[word] = (char*)malloc(sizeof(char) * (j + 1))) == NULL)
+				return (ft_free_mat(split, word - 1));
+			write_word(split[word], s + i, charset);
+			i += j;
+			word++;
 		}
-		else if (s[y] == c && s[y + 1] != c && s[y + 1] != '\0')
-		{
-			mat[x][k] = '\0';
-			k = 0;
-			x++;
-		}
-		else if (s[y] == c && s[y + 1] != c && s[y + 1] == '\0')
-			mat[x + 1] = NULL;
-		y++;
 	}
-	mat[x + 1] = NULL;
-	return (mat);
+	return (0);
 }
 
-char	**ft_split3(void)
-{
-	char **mat;
-
-	mat = malloc(sizeof(char *) * 1);
-	mat[0] = malloc(sizeof(char) * 1);
-	mat[0] = NULL;
-	return (mat);
-}
-
-char	**ft_split(char const *s, char c)
+char	**ft_split(const char *s, char c)
 {
 	char	**mat;
-	int		k;
-	int		i;
-	int		y;
+	int		numwords;
 
-	i = 0;
-	y = 0;
-	k = ft_find_char(s, c);
-	if (ft_empty_str(s, c) == -1)
-		return (ft_split3());
-	if (NULL == (mat = malloc(sizeof(char *) * (k + 2))))
+	numwords = ft_count_words(str, c);
+	if ((mat = (char**)malloc(sizeof(char*) * (numwords + 1))) == NULL)
 		return (NULL);
-	while (i < (k + 2))
-	{
-		if (NULL == (mat[i] = malloc(sizeof(char) * 100)))
-			return (NULL);
-		i++;
-	}
-	while (s[y] == c)
-		y++;
-	return (ft_split2(&s[y], c, mat, 0));
+	mat[numwords] = 0;
+	if (ft_split2(mat, s, c) == -1)
+		return (NULL);
+	return (mat);
 }
