@@ -46,7 +46,7 @@ void	write_word(char *s1, const char *s2, char c)
 		s1[i] = s2[i];
 		i++;
 	}
-	s1[I] = '\0';
+	s1[i] = '\0';
 }
 
 int		ft_split2(char **split, const char *s, char c)
